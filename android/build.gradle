@@ -36,5 +36,15 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
+
+        /////////// CoinJar Addition ////////////////////////
+        maven {
+            url = 'https://seventh-beam.mycloudrepo.io/repositories/eml'
+            credentials {
+                username System.getenv("EML_USER_NAME")
+                password System.getenv("EML_PASSWORD")
+            }
+        }
+        //////////////////////////////////////////////////
     }
 }
