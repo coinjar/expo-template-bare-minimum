@@ -3,7 +3,9 @@
 buildscript {
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
-        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
+        // had to change minSdkVersion from 21 to 24 to compile @google-cloud/recaptcha-enterprise-react-native
+        // From here https://github.com/invertase/react-native-firebase/discussions/7489
+        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '24')
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '33')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '33')
         kotlinVersion = findProperty('android.kotlinVersion') ?: '1.8.10'
@@ -20,6 +22,19 @@ buildscript {
         classpath('com.android.tools.build:gradle:7.4.2')
         classpath('com.facebook.react:react-native-gradle-plugin')
     }
+    ////////////////////// CoinJar Addition ////////////////////////
+    // Added to compile eml react native sdk
+    subprojects { subproject ->
+        afterEvaluate{
+          if((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
+              android {
+                  compileSdkVersion rootProject.ext.compileSdkVersion
+                  buildToolsVersion rootProject.ext.buildToolsVersion
+              }
+          }
+      }
+    }
+    ///////////////////////////////////////////////////////////////
 }
 
 allprojects {
