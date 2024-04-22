@@ -13,6 +13,18 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+
+
+        /////////// CoinJar Addition ////////////////////////
+        maven {
+            url = 'https://seventh-beam.mycloudrepo.io/repositories/eml'
+            credentials {
+                username System.getenv("EML_USER_NAME")
+                password System.getenv("EML_PASSWORD")
+            }
+        }
+        //////////////////////////////////////////////////
+
     }
     dependencies {
         classpath('com.android.tools.build:gradle')
