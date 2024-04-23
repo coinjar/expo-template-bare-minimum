@@ -60,6 +60,7 @@ allprojects {
                 password System.getenv("EML_PASSWORD")
             }
         }
+        maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
         //////////////////////////////////////////////////
     }
 }
