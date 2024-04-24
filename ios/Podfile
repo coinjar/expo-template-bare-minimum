@@ -64,6 +64,24 @@ target 'HelloWorld' do
     :flipper_configuration => flipper_config
   )
 
+
+
+  ############## CoinJar Additions #####################################
+  # Have to statically link these two libraries for Expo SDK 50+
+  # Or else we get symbols not found.
+  pre_install do |installer|
+    installer.pod_targets.each do |pod|
+      if pod.name.eql?('RNScreens') || pod.name.eql?('RNReanimated')
+        def pod.build_type;
+          Pod::BuildType.static_library
+        end
+      end
+    end
+  end
+  ######################################################################
+
+
+
   post_install do |installer|
     react_native_post_install(
       installer,
