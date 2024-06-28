@@ -18,7 +18,7 @@ source 'https://cdn.cocoapods.org/'
 
 prepare_react_native_project!
 
-target 'HelloWorld' do
+target 'Cantor' do
   use_expo_modules!
   config = use_native_modules!
 
@@ -30,10 +30,21 @@ target 'HelloWorld' do
     :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/..",
-    # Temporarily disable privacy file aggregation by default, until React
-    # Native 0.74.2 is released with fixes.
-    :privacy_file_aggregation_enabled => podfile_properties['apple.privacyManifestAggregationEnabled'] == 'true',
   )
+
+  ############## CoinJar Additions #####################################
+  # Have to statically link these two libraries for Expo SDK 50+
+  # Or else we get symbols not found.
+  pre_install do |installer|
+    installer.pod_targets.each do |pod|
+      if pod.name.eql?('RNScreens') || pod.name.eql?('RNReanimated') || pod.name.eql?('RNFBAnalytics')
+        def pod.build_type;
+          Pod::BuildType.static_library
+        end
+      end
+    end
+  end
+  ######################################################################
 
   post_install do |installer|
     react_native_post_install(
