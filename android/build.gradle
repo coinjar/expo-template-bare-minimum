@@ -19,6 +19,19 @@ buildscript {
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
     }
+    ////////////////////// CoinJar Addition ////////////////////////
+    // Added to compile eml react native sdk
+    subprojects { subproject ->
+        afterEvaluate{
+          if((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
+              android {
+                  compileSdkVersion rootProject.ext.compileSdkVersion
+                  buildToolsVersion rootProject.ext.buildToolsVersion
+              }
+          }
+      }
+    }
+    ///////////////////////////////////////////////////////////////
 }
 
 apply plugin: "com.facebook.react.rootproject"
@@ -37,5 +50,18 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
-    }
+
+        /////////// CoinJar Addition ////////////////////////
+        maven {
+            url = 'https://seventh-beam.mycloudrepo.io/repositories/eml'
+            credentials {
+                username System.getenv("EML_USER_NAME")
+                password System.getenv("EML_PASSWORD")
+            }
+        }
+        maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        //////////////////////////////////////////////////
+  }
 }
